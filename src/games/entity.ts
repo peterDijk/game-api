@@ -26,7 +26,6 @@ export default class Game extends BaseEntity {
   @Column('text', {nullable: false})
   color: string = colors[Math.floor(Math.random() * colors.length)]
 
-  // @IsJSON()
   @Column('json', {nullable: false})
   board: string = JSON.parse(JSON.stringify(freshBoard)) 
 

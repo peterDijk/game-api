@@ -49,15 +49,14 @@ export default class GameController {
     if (update.board) {
       const currentBoardParsed = JSON.parse(JSON.stringify(game.board))
       const updateBoardParsed = JSON.parse(update.board)
-      console.log(`LENGTH: ${updateBoardParsed.length}`)
+      
 
-      console.log(`diff: ${moves(currentBoardParsed, updateBoardParsed)}`)
       if (moves(currentBoardParsed, updateBoardParsed) > 1) {
         throw new BadRequestError('You can make only 1 move at the time!')
       }
 
-
       update.board = updateBoardParsed
+      
     }
 
     const merged = await Game.merge(game, update)
