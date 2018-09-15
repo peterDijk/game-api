@@ -29,16 +29,18 @@ export default class GameController {
   @Put('/games/:id')
   async updateGame(
     @Param('id') id: number,
-    @Body() update: Game // without partial it does work? partial is not needed??
+    @Body() update: Partial<Game> 
   ) {
     const game = await Game.findOne(id)
     if (!game) throw new NotFoundError('Cannot find game') 
 
-    const errors = await validate(update)
+    const merged = await Game.merge(game, update)
+
+    const errors = await validate(merged)
     if (errors.length > 0) {
         throw new Error(`Validation failed!`)
     } else {
-      return Game.merge(game, update).save()
+      return merged.save()
     }
     
   }
