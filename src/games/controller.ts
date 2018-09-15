@@ -1,12 +1,7 @@
 import {JsonController, Get, Post, HttpCode, Body, Param, Put, NotFoundError, BadRequestError, BodyParam} from 'routing-controllers'
 import Game from './entity'
 import {validate} from 'class-validator'
-
-const moves = (board1, board2) => 
-  board1
-    .map((row, y) => row.filter((cell, x) => board2[y][x] !== cell))
-    .reduce((a, b) => a.concat(b))
-    .length
+import {moves} from '../lib/gameInput'
 
 @JsonController()
 export default class GameController {
@@ -47,12 +42,24 @@ export default class GameController {
     }
 
     if (update.board) {
+      try {
+        JSON.parse(update.board)
+      } catch (error) {
+        throw new BadRequestError('Please supply stringified JSON')
+      }
       const currentBoardParsed = JSON.parse(JSON.stringify(game.board))
       const updateBoardParsed = JSON.parse(update.board)
+
+      if (updateBoardParsed.filter(row => row.length === 3).length !== 3 || updateBoardParsed.length !== 3) {
+        throw new BadRequestError(`That's not a valid 3x3 board`)
+      }
       
 
       if (moves(currentBoardParsed, updateBoardParsed) > 1) {
         throw new BadRequestError('You can make only 1 move at the time!')
+      }
+      if (moves(currentBoardParsed, updateBoardParsed) === 0) {
+        throw new BadRequestError(`You didn't make a move`)
       }
 
       update.board = updateBoardParsed
@@ -63,7 +70,6 @@ export default class GameController {
 
     const errors = await validate(merged)
     if (errors.length > 0) {
-      console.log(errors)
         throw new BadRequestError(`Validation failed! Reason: ${errors[0]}`)
     } else {
       return merged.save()

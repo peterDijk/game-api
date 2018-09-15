@@ -1,1 +1,1 @@
-console.log(JSON.parse('[["o","o","o"],["o","o","o"],["o","o","o"]]'))
+console.log(JSON.stringify('[["o","o","o"],["o","o","o"],["o","o","o"]]'))
