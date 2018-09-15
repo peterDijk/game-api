@@ -1,6 +1,6 @@
-import {JsonController, Get, Post, HttpCode, Body, Param} from 'routing-controllers'
+import {JsonController, Get, Post, HttpCode, Body, Param, Put, NotFoundError} from 'routing-controllers'
 import Game from './entity'
-// import {validate} from 'class-validator'
+import {validate} from 'class-validator'
 
 @JsonController()
 export default class GameController {
@@ -26,20 +26,20 @@ export default class GameController {
     return game.save()
   }
 
-  // @Put('/games/:id')
-  // async updateGame(
-  //   @Param('id') id: number,
-  //   @Body() update: Partial<Game>
-  // ) {
-  //   const game = await Game.findOne(id)
-  //   if (!game) throw new NotFoundError('Cannot find game') 
+  @Put('/games/:id')
+  async updateGame(
+    @Param('id') id: number,
+    @Body() update: Partial<Game> // without partial it does work? partial is not needed??
+  ) {
+    const game = await Game.findOne(id)
+    if (!game) throw new NotFoundError('Cannot find game') 
 
-  //   const errors = await validate(update)
-  //   if (errors.length > 0) {
-  //       throw new Error(`Validation failed!`)
-  //   } else {
-  //     return Game.merge(game, update).save()
-  //   }
+    const errors = await validate(update)
+    if (errors.length > 0) {
+        throw new Error(`Validation failed!`)
+    } else {
+      return Game.merge(game, update).save()
+    }
     
-  // }
+  }
 }
