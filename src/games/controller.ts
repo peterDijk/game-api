@@ -1,4 +1,4 @@
-import {JsonController, Get, Post, HttpCode, Body, Param, Put, NotFoundError} from 'routing-controllers'
+import {JsonController, Get, Post, HttpCode, Body, Param, Put, NotFoundError, BadRequestError} from 'routing-controllers'
 import Game from './entity'
 import {validate} from 'class-validator'
 
@@ -38,7 +38,8 @@ export default class GameController {
 
     const errors = await validate(merged)
     if (errors.length > 0) {
-        throw new Error(`Validation failed!`)
+      console.log(errors)
+        throw new BadRequestError(`Validation failed! Reason: ${errors[0]}`)
     } else {
       return merged.save()
     }
