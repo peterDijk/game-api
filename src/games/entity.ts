@@ -1,6 +1,6 @@
 import {Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 import {BaseEntity} from 'typeorm/repository/BaseEntity'
-import { IsString, MinLength, IsIn, IsArray } from 'class-validator'
+import { IsString, MinLength, IsIn } from 'class-validator'
 
 const colors: string[] = ['red', 'blue', 'green', 'yellow', 'magenta']
 
@@ -10,13 +10,6 @@ const freshBoard = [
   ['o', 'o', 'o']
 ]
 
-
-// const moves = (board1, board2) => 
-//   board1
-//     .map((row, y) => row.filter((cell, x) => board2[y][x] !== cell))
-//     .reduce((a, b) => a.concat(b))
-//     .length
-
 @Entity()
 export default class Game extends BaseEntity {
 
@@ -24,7 +17,7 @@ export default class Game extends BaseEntity {
   id?:number
 
   @IsString()
-  @MinLength(5)
+  @MinLength(5) // to check if validators keep working
   @Column('text', {nullable: false})
   name: string
 
@@ -33,8 +26,8 @@ export default class Game extends BaseEntity {
   @Column('text', {nullable: false})
   color: string = colors[Math.floor(Math.random() * colors.length)]
 
-  @IsArray()
+  // @IsJSON()
   @Column('json', {nullable: false})
-  board: string[][] = freshBoard // array with in it array of strings
+  board: string = JSON.parse(JSON.stringify(freshBoard)) 
 
 }

@@ -2,6 +2,12 @@ import {JsonController, Get, Post, HttpCode, Body, Param, Put, NotFoundError, Ba
 import Game from './entity'
 import {validate} from 'class-validator'
 
+const moves = (board1, board2) => 
+  board1
+    .map((row, y) => row.filter((cell, x) => board2[y][x] !== cell))
+    .reduce((a, b) => a.concat(b))
+    .length
+
 @JsonController()
 export default class GameController {
 
@@ -12,10 +18,11 @@ export default class GameController {
   }
 
   @Get('/games/:id')
-  getOneGame(
+  async getOneGame(
     @Param('id') id: number
   ) {
-    return Game.findOne(id)
+    const game = await Game.findOne(id)
+    return game
   }
 
   @Post('/games')
@@ -34,8 +41,24 @@ export default class GameController {
   ) {
     const game = await Game.findOne(id)
     if (!game) throw new NotFoundError('Cannot find game') 
+    
+    if (update.id) {
+      throw new BadRequestError(`You can't change the id...`)
+    }
 
-    update.board = JSON.parse(JSON.stringify(update.board))
+    if (update.board) {
+      const currentBoardParsed = JSON.parse(JSON.stringify(game.board))
+      const updateBoardParsed = JSON.parse(update.board)
+      console.log(`LENGTH: ${updateBoardParsed.length}`)
+
+      console.log(`diff: ${moves(currentBoardParsed, updateBoardParsed)}`)
+      if (moves(currentBoardParsed, updateBoardParsed) > 1) {
+        throw new BadRequestError('You can make only 1 move at the time!')
+      }
+
+
+      update.board = updateBoardParsed
+    }
 
     const merged = await Game.merge(game, update)
 
