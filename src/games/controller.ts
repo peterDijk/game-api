@@ -1,6 +1,7 @@
 import {JsonController, Get, Post, HttpCode, Body} from 'routing-controllers'
 import Game from './entity'
 
+
 @JsonController()
 export default class GameController {
 
@@ -12,9 +13,11 @@ export default class GameController {
 
   @Post('/games')
   @HttpCode(201)
-  createGame(
+  async createGame(
     @Body() game: Game
   ) {
-    return game.save()
+    const newGame = Game.create(game)
+    await newGame.setColor()
+    return newGame.save()
   }
 }
