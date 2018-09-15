@@ -18,6 +18,7 @@ export default class GameController {
   ) {
     const newGame = Game.create(game)
     await newGame.setColor()
+    await newGame.setBoard()
     return newGame.save()
   }
 }

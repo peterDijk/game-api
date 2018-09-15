@@ -2,8 +2,6 @@ import {Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 import {BaseEntity} from 'typeorm/repository/BaseEntity'
 import { IsString, } from 'class-validator'
 
-// 
-
 
 @Entity()
 export default class Game extends BaseEntity {
@@ -26,6 +24,14 @@ export default class Game extends BaseEntity {
   setColor() {
     const colors: string[] = ['red', 'blue', 'green', 'yellow', 'magenta']
     this.color = colors[Math.floor(Math.random() * 5)]
+  }
+
+  setBoard() {
+    this.board = JSON.parse(JSON.stringify([
+      ['o', 'o', 'o'],
+      ['o', 'o', 'o'],
+      ['o', 'o', 'o']
+    ]))
   }
 
 }
