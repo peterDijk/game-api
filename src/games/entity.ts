@@ -3,7 +3,9 @@ import {BaseEntity} from 'typeorm/repository/BaseEntity'
 import { IsString, } from 'class-validator'
 
 const colors: string[] = ['red', 'blue', 'green', 'yellow', 'magenta'];
-
+function randomNumber() {
+  return Math.floor(Math.random() * 5)
+}
 
 @Entity()
 export default class Game extends BaseEntity {
@@ -17,8 +19,8 @@ export default class Game extends BaseEntity {
 
 
   @IsString()
-  @Column('text', {nullable: false, default: colors[Math.floor(Math.random() * 5)]})
-  color: string
+  @Column('text', {nullable: false})
+  color: string = colors[randomNumber()]
 
   @Column('json', {nullable: true})
   board: JSON
