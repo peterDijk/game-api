@@ -1,6 +1,6 @@
 import {Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 import {BaseEntity} from 'typeorm/repository/BaseEntity'
-import { IsString, MinLength, IsIn } from 'class-validator'
+import { IsString, MinLength, IsIn, IsArray } from 'class-validator'
 
 const colors: string[] = ['red', 'blue', 'green', 'yellow', 'magenta']
 
@@ -33,7 +33,7 @@ export default class Game extends BaseEntity {
   @Column('text', {nullable: false})
   color: string = colors[Math.floor(Math.random() * colors.length)]
 
-  
+  @IsArray()
   @Column('json', {nullable: false})
   board: string[][] = freshBoard // array with in it array of strings
 
