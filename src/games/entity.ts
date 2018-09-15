@@ -4,6 +4,12 @@ import { IsString, MinLength, IsIn } from 'class-validator'
 
 const colors: string[] = ['red', 'blue', 'green', 'yellow', 'magenta']
 
+// const moves = (board1, board2) => 
+//   board1
+//     .map((row, y) => row.filter((cell, x) => board2[y][x] !== cell))
+//     .reduce((a, b) => a.concat(b))
+//     .length
+
 @Entity()
 export default class Game extends BaseEntity {
 

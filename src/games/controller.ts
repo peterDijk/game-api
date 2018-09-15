@@ -1,4 +1,4 @@
-import {JsonController, Get, Post, HttpCode, Body, Param, Put, NotFoundError, BadRequestError} from 'routing-controllers'
+import {JsonController, Get, Post, HttpCode, Body, Param, Put, NotFoundError, BadRequestError, BodyParam} from 'routing-controllers'
 import Game from './entity'
 import {validate} from 'class-validator'
 
@@ -21,9 +21,10 @@ export default class GameController {
   @Post('/games')
   @HttpCode(201)
   async createGame(
-    @Body() game: Game
+    @BodyParam("name") name: string
   ) {
-    return game.save()
+    const newGame = await Game.create({name})
+    return newGame.save()
   }
 
   @Put('/games/:id')
