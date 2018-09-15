@@ -35,6 +35,8 @@ export default class GameController {
     const game = await Game.findOne(id)
     if (!game) throw new NotFoundError('Cannot find game') 
 
+    // update.board = JSON.parse(update.board)
+
     const merged = await Game.merge(game, update)
 
     const errors = await validate(merged)
