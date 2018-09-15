@@ -17,23 +17,14 @@ export default class Game extends BaseEntity {
 
   @IsIn(colors)
   @IsString()
-  @Column('text', {nullable: true})
-  color: string
+  @Column('text', {nullable: false})
+  color: string = colors[Math.floor(Math.random() * 5)]
 
-  @Column('json', {nullable: true})
-  board: JSON
-
-  setColor() {
-    this.color = colors[Math.floor(Math.random() * 5)]
-  }
-
-  setBoard() {
-    const newBoard: JSON = JSON.parse(JSON.stringify([
-      ['o', 'o', 'o'],
-      ['o', 'o', 'o'],
-      ['o', 'o', 'o']
-    ]))
-    this.board = newBoard
-  }
+  @Column('json', {nullable: false})
+  board: JSON = JSON.parse(JSON.stringify([
+    ['o', 'o', 'o'],
+    ['o', 'o', 'o'],
+    ['o', 'o', 'o']
+  ]))
 
 }

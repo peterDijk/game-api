@@ -20,12 +20,9 @@ export default class GameController {
 
   @Post('/games')
   @HttpCode(201)
-  createGame(
+  async createGame(
     @Body() game: Game
   ) {
-    // const newGame = Game.create(game)
-    // await newGame.setColor()
-    // await newGame.setBoard()
     return game.save()
   }
 
