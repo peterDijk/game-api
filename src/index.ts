@@ -11,8 +11,8 @@ const app = createKoaServer({
     ]
 })
 
-app.listen(port, () => console.log(`Listening on port ${port}`))
-export let dbUp = false
 setupDb()
-  .then(_ => dbUp = true)
+  .then(_ =>
+    app.listen(port, () => console.log(`Listeningg on port ${port}`))
+  )
   .catch(err => console.error(err))
