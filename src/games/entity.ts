@@ -27,11 +27,12 @@ export default class Game extends BaseEntity {
   }
 
   setBoard() {
-    this.board = JSON.parse(JSON.stringify([
+    const newBoard: JSON = JSON.parse(JSON.stringify([
       ['o', 'o', 'o'],
       ['o', 'o', 'o'],
       ['o', 'o', 'o']
     ]))
+    this.board = newBoard
   }
 
 }
