@@ -29,7 +29,7 @@ export default class GameController {
   @Put('/games/:id')
   async updateGame(
     @Param('id') id: number,
-    @Body() update: Partial<Game> // without partial it does work? partial is not needed??
+    @Body() update: Game // without partial it does work? partial is not needed??
   ) {
     const game = await Game.findOne(id)
     if (!game) throw new NotFoundError('Cannot find game') 
