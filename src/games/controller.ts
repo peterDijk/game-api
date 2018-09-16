@@ -62,6 +62,5 @@ export default class GameController {
     } else {
       return merged.save()
     }
-    
   }
 }
