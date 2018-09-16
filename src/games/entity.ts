@@ -20,6 +20,6 @@ export default class Game extends BaseEntity {
   color: string = colors[Math.floor(Math.random() * colors.length)]
   
   @Column('json', {nullable: false})
-  board: string = JSON.parse(JSON.stringify(freshBoard)) 
+  board: string[][] = JSON.parse(JSON.stringify(freshBoard)) 
 
 }

@@ -1,4 +1,4 @@
-import {JsonController, Get, Post, HttpCode, Body, Param, Put, NotFoundError, BadRequestError, BodyParam} from 'routing-controllers'
+import {JsonController, Get, Post, HttpCode, Param, Put, NotFoundError, BadRequestError, BodyParam} from 'routing-controllers'
 import Game from './entity'
 import {validate} from 'class-validator'
 import {moves} from '../lib/gameInput'
@@ -32,41 +32,29 @@ export default class GameController {
   @Put('/games/:id')
   async updateGame(
     @Param('id') id: number,
-    @Body() update: Partial<Game> 
+    @BodyParam('json') json: Partial<Game>
   ) {
     const game = await Game.findOne(id)
-    if (!game) throw new NotFoundError('Cannot find game') 
+    if (!game) throw new NotFoundError('Cannot find game')
     
-    if (update.id) {
+    if (json.id) {
       throw new BadRequestError(`You can't change the id...`)
     }
 
-    if (update.board) {
-      try {
-        JSON.parse(update.board)
-      } catch (error) {
-        throw new BadRequestError('Please supply stringified JSON')
-      }
-      const currentBoardParsed = JSON.parse(JSON.stringify(game.board))
-      const updateBoardParsed = JSON.parse(update.board)
+    if (json.board) {
 
-      if (updateBoardParsed.filter(row => row.length === 3).length !== 3 || updateBoardParsed.length !== 3) {
-        throw new BadRequestError(`That's not a valid 3x3 board`)
-      }
-      
-
-      if (moves(currentBoardParsed, updateBoardParsed) > 1) {
-        throw new BadRequestError('You can make only 1 move at the time!')
-      }
-      if (moves(currentBoardParsed, updateBoardParsed) === 0) {
-        throw new BadRequestError(`You didn't make a move`)
-      }
-
-      update.board = updateBoardParsed
-      
+        if (json.board.filter(row => row.length === 3).length !== 3 || json.board.length !== 3) {
+          throw new BadRequestError(`That's not a valid 3x3 board`)
+        }
+        if (moves(game.board, json.board) > 1) {
+          throw new BadRequestError('You can make only 1 move at the time!')
+        }
+        if (moves(game.board, json.board) === 0) {
+          throw new BadRequestError(`You didn't make a move`)
+        }
     }
 
-    const merged = await Game.merge(game, update)
+    const merged = await Game.merge(game, json)
 
     const errors = await validate(merged)
     if (errors.length > 0) {
