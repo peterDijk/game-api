@@ -1,4 +1,4 @@
-import {JsonController, Get, Post, HttpCode, Param, Put, NotFoundError, BadRequestError, BodyParam} from 'routing-controllers'
+import {JsonController, Get, Post, HttpCode, Body, Param, Put, NotFoundError, BadRequestError, BodyParam} from 'routing-controllers'
 import Game from './entity'
 import {validate} from 'class-validator'
 import {moves} from '../lib/gameInput'
@@ -32,7 +32,7 @@ export default class GameController {
   @Put('/games/:id')
   async updateGame(
     @Param('id') id: number,
-    @BodyParam('json') json: Partial<Game>
+    @Body() json: Partial<Game>
   ) {
     const game = await Game.findOne(id)
     if (!game) throw new NotFoundError('Cannot find game')
